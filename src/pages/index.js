@@ -47,6 +47,8 @@ export default function Home() {
   }
 
   return (
-    <button onClick={() => signIn('google')}>Sign in with Google</button>
+    <button onClick={() => signIn('google',{
+      redirect: true,
+      callbackUrl:location.href})}>Sign in with Google</button>
   );
 }
