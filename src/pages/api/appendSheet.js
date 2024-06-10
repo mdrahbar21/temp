@@ -1,11 +1,11 @@
-// pages/api/updateSheet.js
+// pages/api/appendSheet.js
 import { getToken } from "next-auth/jwt";
 import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
-    console.log('Received request:', req.method, req.body); // Log the request method and body
+    console.log('Received request:', req.method, req.body);
 
-    if (req.method !== 'PUT') { // Ensure we are using PUT method
+    if (req.method !== 'POST') { 
         console.log('Method not allowed');
         return res.status(405).json({ error: 'Method not allowed' });
     }
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         return res.status(403).json({ error: 'Access Token Missing' });
     }
 
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?valueInputOption=${valueInputOption}`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=${valueInputOption}`;
     console.log('URL:', url);
     console.log('Payload:', { range, values });
 
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
     try {
         const response = await fetch(url, {
-            method: 'PUT', // Correct method
+            method: 'POST', 
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
         const data = JSON.parse(text);
         res.status(200).json(data);
     } catch (error) {
-        console.error('Failed to update data:', error);
-        res.status(500).json({ error: 'Failed to update data' });
+        console.error('Failed to append data:', error);
+        res.status(500).json({ error: 'Failed to append data' });
     }
 }

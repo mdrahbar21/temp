@@ -1,6 +1,6 @@
 // pages/api/auth/[...nextauth].js
-import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 
 export default NextAuth({
   providers: [
@@ -8,40 +8,27 @@ export default NextAuth({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       authorization: {
+        url: 'https://accounts.google.com/o/oauth2/auth',
         params: {
-          scope: 'openid email profile https://www.googleapis.com/auth/spreadsheets',
-          access_type: 'offline',
-          response_type: 'code id_token',
-          prompt: 'consent',
-          checks: ['none'],
-          nonce: true
+          scope: 'openid email profile https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+          prompt: 'consent', 
         },
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+		strategy: 'jwt',
+	},
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("Account Details:", account);
-      console.log("email: ", email);
-      return true;
-    },
-    async jwt({ token, account }) {
-      console.log("JWT callback - account:", account);
-      if (account?.access_token) {
-        token.accessToken = account.access_token;
-      }
-      if (account?.id_token) {
-        token.idToken = account.id_token;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      console.log("Session callback - session:", session);
-      console.log("Session callback - token:", token);
-      session.accessToken = token.accessToken;
-      session.idToken = token.idToken;
-      return session;
-    },
-  }
+
+    async jwt({ token, user, account }) {
+			if (account) {
+				token.accessToken = account.access_token;
+			}
+			console.log(token);
+			return token;
+		},
+    
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 });
