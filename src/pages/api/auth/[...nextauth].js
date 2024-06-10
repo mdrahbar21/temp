@@ -26,6 +26,7 @@ export default NextAuth({
       return true;
     },
     async jwt({ token, account }) {
+      console.log("JWT callback - account:", account);
       if (account?.access_token) {
         token.accessToken = account.access_token;
       }
@@ -35,6 +36,8 @@ export default NextAuth({
       return token;
     },
     async session({ session, token }) {
+      console.log("Session callback - session:", session);
+      console.log("Session callback - token:", token);
       session.accessToken = token.accessToken;
       session.idToken = token.idToken;
       return session;
