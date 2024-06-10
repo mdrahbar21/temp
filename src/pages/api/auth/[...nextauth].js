@@ -13,13 +13,18 @@ export default NextAuth({
           access_type: 'offline',
           response_type: 'code id_token',
           prompt: 'consent',
-          nonce: true
+          // nonce: true
         },
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("Account Details:", account);
+      console.log("email: ", email);
+      return true;
+    },
     async jwt({ token, account }) {
       if (account?.access_token) {
         token.accessToken = account.access_token;
@@ -34,10 +39,5 @@ export default NextAuth({
       session.idToken = token.idToken;
       return session;
     },
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("Account Details:", account);
-      console.log("email: ", email);
-      return true;
-    }
   }
 });
