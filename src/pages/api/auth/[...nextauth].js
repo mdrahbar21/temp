@@ -13,7 +13,7 @@ export default NextAuth({
           access_type: 'offline',
           response_type: 'code id_token',
           prompt: 'consent',
-          // nonce: true
+          nonce: true
         },
       },
     }),
