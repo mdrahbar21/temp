@@ -1,7 +1,12 @@
 import Link from 'next/link';
-
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useState } from "react";
 
 export default function Home() {
+
+    const { data: session } = useSession();
+    
+    if (session) {
     return (
         <div className='bg-black text-white'>
             <h1>Google Sheets Operations</h1>
@@ -28,6 +33,13 @@ export default function Home() {
                     </li>
                 </ul>
             </nav>
+            <br />
+            <button onClick={() => signOut('google')}>Sign out</button>
+
         </div>
-    );
+    )
+};
+    return (
+        <button onClick={() => signIn('google')}>Sign in with Google</button>
+      );
 }
