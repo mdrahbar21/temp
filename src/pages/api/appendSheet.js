@@ -12,8 +12,9 @@ export default async function handler(req,res) {
         return res.status(403).json({ error: 'Missing Required Fields' });
         // return new Response(JSON.stringify({success: false, message: `Missing Required Fields`}),  {status: 403});
     }
+    
     const range='A:D';
-    const values = [[orderId.toString(),issueType.toString(),issueDescription.toString()]];
+    const values = [[orderId.toString(),issueType.toString(),issueDescription.toString(), ]];
     const spreadsheetId='1t4cdNfUxSB_S6ZfpwIkxLQoDIw52tUKlc0Obt5XNjrk';
     const valueInputOption = 'RAW';
 
@@ -29,7 +30,7 @@ export default async function handler(req,res) {
 
     // const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     // const accessToken=process.env.accessToken;
-    const accessToken = await redis.get(`accessToken-rahbar@hoomanlabs.com`);
+    const accessToken = await redis.get(`accessToken-tarun@hoomanlabs.com`);
 
     // if (!token) {
     //     console.log('Unauthorized request');
