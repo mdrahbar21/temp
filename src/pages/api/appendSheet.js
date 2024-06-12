@@ -4,12 +4,13 @@ import fetch from 'node-fetch';
 import { Redis } from '@upstash/redis';
 
 
-export async function POST(req) {
+export default async function handler(req,res) {
     console.log('Received request:', req.body, req.method);
     const { orderId, issueDescription, issueType } = req.body;
     if (!orderId || !issueDescription || !issueType) {
         console.log('Missing required fields');
-        return new Response(JSON.stringify({success: false, message: `Missing Required Fields`}),  {status: 403});
+        return res.status(403).json({ error: 'Missing Required Fields' });
+        // return new Response(JSON.stringify({success: false, message: `Missing Required Fields`}),  {status: 403});
     }
     const range='A:D';
     const values = [[orderId.toString(),issueType.toString(),issueDescription.toString()]];
@@ -38,7 +39,7 @@ export async function POST(req) {
     // const accessToken = token.accessToken;
     if (!accessToken) {
         console.log('Access Token Missing');
-        return res.status(403).json({ error: 'Access Token Missing' });
+        return res.status(403).json({success:false, message: 'Access Token Missing' });
     }
 
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=${valueInputOption}`;
@@ -65,13 +66,15 @@ export async function POST(req) {
         console.log('Response Text:', text);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            return res.status(400).json({success:false, message:`HTTP error! status: ${response.status}`})
+            // throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = JSON.parse(text);
-        res.status(200).json(data);
+        // res.status(200).json(data);
+        return res.status(200).json({success:true, message: 'updated successfully'})
     } catch (error) {
         console.error('Failed to append data:', error);
-        res.status(500).json({ error: 'Failed to append data' });
+        return res.status(500).json({ success:false, message: 'Failed to append data' });
     }
 }
