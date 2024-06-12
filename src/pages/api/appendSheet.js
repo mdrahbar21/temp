@@ -6,9 +6,9 @@ import { Redis } from '@upstash/redis';
 
 export default async function handler(req, res) {
     console.log('Received request:', req.body, req.method);
-    const orderId=req.body.orderId;
-    const issue=req.body.issue;
-    const issueDescription=req.body.issueDescription;
+    const orderId=req.body.orderId.toString();
+    const issue=req.body.issue.toString();
+    const issueDescription=req.body.issueDescription.toString();
     const range='A:D';
     const values = [[orderId,issue,issueDescription]];
     const spreadsheetId='1t4cdNfUxSB_S6ZfpwIkxLQoDIw52tUKlc0Obt5XNjrk';
