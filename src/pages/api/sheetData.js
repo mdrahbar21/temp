@@ -5,16 +5,17 @@ export default async function handler(req, res) {
     const {range, spreadsheetId}=req.body;
   
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!token) {
-    return res.status(401).json({
-      error: {
-        name: 'Unauthorized',
-        message: 'Unauthorized'
-      },
-    },
-    );
-  }
-  const accessToken = token.accessToken;
+  const accessToken=process.env.accessToken
+  // if (!token) {
+  //   return res.status(401).json({
+  //     error: {
+  //       name: 'Unauthorized',
+  //       message: 'Unauthorized'
+  //     },
+  //   },
+  //   );
+  // }
+  // const accessToken = token?.accessToken;
   console.log('get data access token: ', accessToken);
 
   if (!accessToken) {

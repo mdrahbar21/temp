@@ -27,7 +27,7 @@ function AppendSheetPage() {
 
             const data = await response.json();
             if (response.ok) {
-                setMessage('Data successfully appended');
+                setMessage(`Data successfully appended \n Link: https://docs.google.com/spreadsheets/d/${spreadsheetId}`);
             } else {
                 setMessage(`Failed to append data: ${data.error.message}`);
             }

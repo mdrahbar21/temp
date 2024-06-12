@@ -27,7 +27,7 @@ function UpdateSheetPage() {
 
             const data = await response.json();
             if (response.ok) {
-                setMessage('Data successfully updated');
+                setMessage(`Data successfully updated \n Link: https://docs.google.com/spreadsheets/d/${spreadsheetId}`);
             } else {
                 setMessage(`Failed to update: ${data.error.message}`);
             }

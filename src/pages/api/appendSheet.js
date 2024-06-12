@@ -1,24 +1,33 @@
 // pages/api/appendSheet.js
 import { getToken } from "next-auth/jwt";
 import fetch from 'node-fetch';
+import { Redis } from '@upstash/redis';
+
 
 export default async function handler(req, res) {
-    console.log('Received request:', req.method, req.body);
+    console.log('Received request:', req);
 
-    if (req.method !== 'POST') { 
-        console.log('Method not allowed');
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
+    // if (req.method !== 'POST') { 
+    //     console.log('Method not allowed');
+    //     return res.status(405).json({ error: 'Method not allowed' });
+    // }
+
+    const redis = new Redis({
+        url: process.env.REDIS_URL,
+        token: process.env.REDIS_TOKEN,
+    });
 
     const { range, spreadsheetId, values, valueInputOption = 'RAW' } = req.body;
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    // const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    // const accessToken=process.env.accessToken;
+    const accessToken = await redis.get(`accessToken-rahbar@hoomanlabs.com`);
 
-    if (!token) {
-        console.log('Unauthorized request');
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
+    // if (!token) {
+    //     console.log('Unauthorized request');
+    //     return res.status(401).json({ error: 'Unauthorized' });
+    // }
 
-    const accessToken = token.accessToken;
+    // const accessToken = token.accessToken;
     if (!accessToken) {
         console.log('Access Token Missing');
         return res.status(403).json({ error: 'Access Token Missing' });
