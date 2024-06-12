@@ -6,11 +6,13 @@ import { Redis } from '@upstash/redis';
 
 export default async function handler(req, res) {
     console.log('Received request:', req.body, req.method);
-    const orderId=req.body.orderId.toString();
-    const issue=req.body.issue.toString();
-    const issueDescription=req.body.issueDescription.toString();
+    const { orderId, issueDescription, issueType } = req.body;
+    if (!orderId || !issueDescription || !issueType) {
+        console.log('Missing required fields');
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
     const range='A:D';
-    const values = [[orderId,issue,issueDescription]];
+    const values = [[orderId.toString(),issue.toString(),issueDescription.toString()]];
     const spreadsheetId='1t4cdNfUxSB_S6ZfpwIkxLQoDIw52tUKlc0Obt5XNjrk';
     const valueInputOption = 'RAW';
 
