@@ -5,7 +5,14 @@ import { Redis } from '@upstash/redis';
 
 
 export default async function handler(req, res) {
-    console.log('Received request:', req);
+    console.log('Received request:', req.body, req.method);
+    const orderId=req.body.orderId;
+    const issue=req.body.issue;
+    const issueDescription=req.body.issueDescription;
+    const range='A:D';
+    const values = [[orderId,issue,issueDescription]];
+    const spreadsheetId='1t4cdNfUxSB_S6ZfpwIkxLQoDIw52tUKlc0Obt5XNjrk';
+    const valueInputOption = 'RAW';
 
     // if (req.method !== 'POST') { 
     //     console.log('Method not allowed');
@@ -17,7 +24,6 @@ export default async function handler(req, res) {
         token: process.env.REDIS_TOKEN,
     });
 
-    const { range, spreadsheetId, values, valueInputOption = 'RAW' } = req.body;
     // const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     // const accessToken=process.env.accessToken;
     const accessToken = await redis.get(`accessToken-rahbar@hoomanlabs.com`);
